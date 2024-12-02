@@ -1,0 +1,95 @@
+{
+  "name": "watchlist",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/watchlist/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/watchlist",
+        "index": "apps/watchlist/src/index.html",
+        "baseHref": "/",
+        "main": "apps/watchlist/src/main.ts",
+        "tsConfig": "apps/watchlist/tsconfig.app.json",
+        "assets": [
+          "apps/watchlist/src/favicon.ico",
+          "apps/watchlist/src/assets"
+        ],
+        "styles": ["apps/watchlist/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "apps/watchlist/webpack.config.ts"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/watchlist/src/environments/environment.ts",
+              "with": "apps/watchlist/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/watchlist/webpack.config.prod.ts"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "watchlist:build",
+        "hmr": true,
+        "port": 4202
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "watchlist:build:development"
+        },
+        "production": {
+          "buildTarget": "watchlist:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "executor": "@nx/react:module-federation-static-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "serveTarget": "watchlist:serve"
+      },
+      "configurations": {
+        "development": {
+          "serveTarget": "watchlist:serve:development"
+        },
+        "production": {
+          "serveTarget": "watchlist:serve:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/watchlist/jest.config.ts"
+      }
+    }
+  }
+}
