@@ -5,6 +5,8 @@ import { ModuleFederationConfig } from '@nx/webpack';
 
 import baseConfig from './module-federation.config';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const prodConfig: ModuleFederationConfig = {
   ...baseConfig,
   /*
@@ -25,8 +27,8 @@ const prodConfig: ModuleFederationConfig = {
    * ]
    */
   remotes: [
-    ['home', 'http://localhost:4201/'],
-    ['watchlist', 'http://localhost:4202/'],
+    ['home', isDev ? 'http://localhost:4201/' : 'https://home-monomicro.netlify.app/'],
+    ['watchlist', isDev ? 'http://localhost:4202/' : 'https://watchlist-monomicro.netlify.app/'],
   ],
 };
 
